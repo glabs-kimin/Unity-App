@@ -3,52 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>경기도 Unity MVP (v1.7)</title>
+    <title>경기도 Unity MVP (v1.8)</title>
     <style>
-        /* CSS는 이전 v1.6 버전과 동일합니다. */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
         :root { --primary-blue: #0A2C4A; --accent-warm: #FFB836; --text-dark: #333333; --text-light: #777777; --bg-light: #f8f9fa; --white: #ffffff; --border-color: #e9ecef; }
         body { font-family: 'Noto Sans KR', sans-serif; margin: 0; background-color: #ccc; display: flex; justify-content: center; padding: 20px 0; }
         .phone-container { width: 375px; height: 812px; background-color: var(--white); box-shadow: 0 0 20px rgba(0,0,0,0.1); border-radius: 40px; overflow: hidden; border: 10px solid #111; display: flex; flex-direction: column; }
         .content-scroll { flex-grow: 1; overflow-y: auto; background-color: var(--bg-light); }
         .screen { padding: 20px; }
-        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .main-header .logo { font-size: 20px; font-weight: 700; color: var(--primary-blue); }
+        h2, h3 { color: var(--primary-blue); margin-top: 0; }
+        p { color: var(--text-dark); line-height: 1.6; }
+        input { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid var(--border-color); border-radius: 5px; font-size: 16px;}
+        button { width: 100%; padding: 12px; border: none; background-color: var(--primary-blue); color: var(--white); border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 5px;}
+        button:hover { opacity: 0.9; }
         .bottom-nav { display: flex; justify-content: space-around; background-color: var(--white); border-top: 1px solid var(--border-color); padding: 10px 0; width: 100%; }
         .nav-btn { text-align: center; font-size: 12px; color: var(--text-light); cursor: pointer; flex-grow: 1; }
         .nav-btn.active { color: var(--accent-warm); font-weight: 700; }
-        .menu-list-item { background-color: var(--white); padding: 15px; border-bottom: 1px solid var(--border-color); cursor: pointer; }
+        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .main-header .logo { font-size: 20px; font-weight: 700; color: var(--primary-blue); }
+        .program-card { background: var(--white); border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; padding: 15px; }
+        .menu-list-item { background-color: var(--white); padding: 15px; border-bottom: 1px solid var(--border-color); cursor: pointer; font-weight: 500;}
         .menu-list-item:hover { background-color: #f8f9fa; }
         .menu-list-item.disabled { color: #aaa; cursor: not-allowed; }
+        #logout-button, #mypage-logout-button { background-color: #6c757d; }
     </style>
 </head>
 <body>
     <div class="phone-container">
         <div class="content-scroll">
-            <div id="auth-screen" class="screen"> </div>
-            <div id="main-screen" class="screen" style="display:none;"> </div>
-            <div id="program-list-screen" class="screen" style="display:none;"> </div>
-            <div id="my-bookings-screen" class="screen" style="display:none;"> </div>
+            
+            <div id="auth-screen" class="screen">
+                <header class="main-header"><div class="logo">경기도 Unity</div></header>
+                <h2>안녕하세요!<br>서비스 이용을 위해 로그인 해주세요.</h2>
+                <div id="error-message" style="color: red; margin-bottom: 10px; min-height: 1.2em;"></div>
+                <input type="email" id="auth-email" placeholder="이메일">
+                <input type="password" id="auth-password" placeholder="비밀번호 (6자리 이상)">
+                <button id="login-button">로그인</button>
+                <button id="signup-button" style="background-color: #17a2b8;">회원가입</button>
+            </div>
 
-            <div id="my-page-screen" class="screen" style="display:none;">
+            <div id="main-screen" class="screen" style="display:none;">
                 <header class="main-header">
-                    <div class="logo">마이페이지</div>
+                    <div class="logo">경기도 Unity</div>
+                    <button id="logout-button" style="width: auto;">로그아웃</button>
                 </header>
                 <main>
+                    <p id="welcome-message" style="font-size: 22px; font-weight: 500;"></p>
+                    <div id="my-bookings-list" style="margin-top:20px;"></div>
+                </main>
+            </div>
+
+            <div id="program-list-screen" class="screen" style="display:none;">
+                <header class="main-header"><div class="logo">전체 프로그램</div></header>
+                <main>
+                    <h3>튼튼 건강 놀이터 (0-4세)</h3>
+                    <div class="program-card"><h4>리틀 프로젝트 그룹</h4><p>4주 과정의 협동/창의력 프로그램</p></div>
+                    <div class="program-card"><h4>오감/과학 통합 클래스</h4><p>두뇌 발달을 위한 일일 체험 프로그램</p></div>
+                    <h3 style="margin-top: 30px;">액티브 시니어 라운지</h3>
+                    <div class="program-card"><h4>A.I.P. 스마트 웰니스</h4><p>스마트 장비 기반의 개인 맞춤형 건강 관리</p></div>
+                </main>
+            </div>
+
+            <div id="my-bookings-screen" class="screen" style="display:none;">
+                <header class="main-header"><div class="logo">나의 예약 현황</div></header>
+                <main id="my-bookings-list-page"></main>
+            </div>
+
+            <div id="my-page-screen" class="screen" style="display:none;">
+                <header class="main-header"><div class="logo">마이페이지</div></header>
+                <main>
                     <div class="program-card" style="margin-bottom: 20px;">
-                        <h3 id="mypage-user-email">user@example.com</h3>
-                        <p>일반 회원</p>
+                        <h3 id="mypage-user-email"></h3><p>G-Labs 통합 멤버</p>
                     </div>
                     <div class="menu-list">
                         <div class="menu-list-item disabled">회원 정보 수정 (준비 중)</div>
-                        <div class="menu-list-item disabled">결제 카드 관리 (준비 중)</div>
+                        <div class="menu-list-item disabled">결제 수단 관리 (준비 중)</div>
                         <div class="menu-list-item">고객센터 / 문의하기</div>
                         <div class="menu-list-item" id="mypage-logout-button">로그아웃</div>
                     </div>
                 </main>
             </div>
-            
-            <div id="pass-screen" class="screen" style="display:none; text-align: center;"> </div>
+
         </div>
         <footer class="bottom-nav" style="display:none;">
             <div class="nav-btn" id="nav-home">홈</div>
@@ -58,46 +93,85 @@
         </footer>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script>
-      // ... (이전 버전의 모든 코드와 로직을 포함) ...
+      const firebaseConfig = {
+        apiKey: "AIzaSyBirQyhng653nT8u5BOL_rIqz3s5RMGXyo",
+        authDomain: "unity-70a0d.firebaseapp.com",
+        projectId: "unity-70a0d",
+        storageBucket: "unity-70a0d.appspot.com",
+        messagingSenderId: "875001915345",
+        appId: "1:875001915345:web:67171ea942da13320962f0",
+        measurementId: "G-82Y95QFB8R"
+      };
 
-      // --- HTML 요소 추가 ---
-      const myPageScreen = document.getElementById('my-page-screen');
-      const navMyPageBtn = document.getElementById('nav-my-page');
-      const mypageUserEmail = document.getElementById('mypage-user-email');
-      const mypageLogoutButton = document.getElementById('mypage-logout-button');
-
-      // --- 함수 수정 ---
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
       
-      // 화면 전환 함수에 '마이페이지' 추가
-      function showScreen(screenKey) {
-        Object.values(screens).forEach(screen => screen.style.display = 'none');
-        screens[screenKey].style.display = 'block';
+      const screens = {
+        auth: document.getElementById('auth-screen'),
+        main: document.getElementById('main-screen'),
+        programList: document.getElementById('program-list-screen'),
+        myBookings: document.getElementById('my-bookings-screen'),
+        myPage: document.getElementById('my-page-screen'),
+      };
+      
+      const navButtons = {
+        home: document.getElementById('nav-home'),
+        programs: document.getElementById('nav-programs'),
+        myBookings: document.getElementById('nav-my-bookings'),
+        myPage: document.getElementById('nav-my-page')
+      };
 
-        Object.values(navButtons).forEach(btn => btn.classList.remove('active'));
+      const emailInput = document.getElementById('auth-email');
+      const passwordInput = document.getElementById('auth-password');
+      const signupButton = document.getElementById('signup-button');
+      const loginButton = document.getElementById('login-button');
+      const logoutButton = document.getElementById('logout-button');
+      const mypageLogoutButton = document.getElementById('mypage-logout-button');
+      const welcomeMessage = document.getElementById('welcome-message');
+      const mypageUserEmail = document.getElementById('mypage-user-email');
+      const errorMessage = document.getElementById('error-message');
+      const bottomNav = document.querySelector('.bottom-nav');
+
+      function showScreen(screenKey) {
+        Object.keys(screens).forEach(key => {
+            if (screens[key]) screens[key].style.display = 'none';
+        });
+        if (screens[screenKey]) screens[screenKey].style.display = 'block';
+
+        Object.keys(navButtons).forEach(key => {
+            if(navButtons[key]) navButtons[key].classList.remove('active');
+        });
         if (navButtons[screenKey]) {
             navButtons[screenKey].classList.add('active');
-        } else { /* ... */ }
+        }
       }
-
-      // --- 이벤트 리스너 및 상태 관리 수정 ---
 
       auth.onAuthStateChanged(user => {
         if (user) {
-          // ... (이전 로그인 로직) ...
-          mypageUserEmail.textContent = user.email; // 마이페이지에 이메일 표시
+          showScreen('main');
+          if(bottomNav) bottomNav.style.display = 'flex';
+          navButtons.home.classList.add('active');
+          welcomeMessage.innerHTML = `${user.email.split('@')[0]} 님,<br>환영합니다.`;
+          if(mypageUserEmail) mypageUserEmail.textContent = user.email;
         } else {
           showScreen('auth');
-          bottomNav.style.display = 'none';
+          if(bottomNav) bottomNav.style.display = 'none';
         }
       });
-      
-      // '마이페이지' 버튼 클릭 이벤트 추가
-      navMyPageBtn.addEventListener('click', () => showScreen('myPage'));
-      
-      // 마이페이지 내 로그아웃 버튼 이벤트
-      mypageLogoutButton.addEventListener('click', () => auth.signOut());
 
+      signupButton.addEventListener('click', () => { /* ... */ });
+      loginButton.addEventListener('click', () => { /* ... */ });
+      logoutButton.addEventListener('click', () => auth.signOut());
+      mypageLogoutButton.addEventListener('click', () => auth.signOut());
+      navButtons.home.addEventListener('click', () => showScreen('main'));
+      navButtons.programs.addEventListener('click', () => showScreen('programList'));
+      navButtons.myBookings.addEventListener('click', () => showScreen('myBookings'));
+      navButtons.myPage.addEventListener('click', () => showScreen('myPage'));
     </script>
 </body>
 </html>
