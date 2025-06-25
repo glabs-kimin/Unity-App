@@ -144,15 +144,19 @@
           });
       });
 
+      // 로그인 버튼 클릭 이벤트
       loginButton.addEventListener('click', () => {
         const email = loginEmail.value;
         const password = loginPassword.value;
         auth.signInWithEmailAndPassword(email, password)
-         .then(userCredential => {
+          .then(userCredential => {
+            // 로그인 성공 시
+            alert('로그인에 성공했습니다! 환영합니다.'); // <-- 이 부분이 추가되었습니다.
             loginEmail.value = '';
             loginPassword.value = '';
           })
           .catch(error => {
+            // 로그인 실패 시
             alert(`로그인 실패: ${error.message}`);
           });
       });
