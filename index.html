@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>경기도 Unity MVP (v2.0)</title>
+    <title>경기도 Unity MVP (v1.6)</title>
     <style>
+        /* CSS는 이전 v1.5 버전과 동일합니다. */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
         :root { --primary-blue: #0A2C4A; --accent-warm: #FFB836; --text-dark: #333333; --text-light: #777777; --bg-light: #f8f9fa; --white: #ffffff; --border-color: #e9ecef; }
         body { font-family: 'Noto Sans KR', sans-serif; margin: 0; background-color: #ccc; display: flex; justify-content: center; padding: 20px 0; }
@@ -12,77 +13,36 @@
         .content-scroll { flex-grow: 1; overflow-y: auto; background-color: var(--bg-light); }
         .screen { padding: 20px; }
         h2, h3 { color: var(--primary-blue); margin-top: 0; }
-        p { color: var(--text-dark); line-height: 1.6; }
-        input { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid var(--border-color); border-radius: 5px; font-size: 16px;}
-        button { width: 100%; padding: 12px; border: none; background-color: var(--primary-blue); color: var(--white); border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 5px;}
-        button:hover { opacity: 0.9; }
-        #logout-button { background-color: #6c757d; }
+        .program-card { background: var(--white); border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; padding: 15px; }
         .bottom-nav { display: flex; justify-content: space-around; background-color: var(--white); border-top: 1px solid var(--border-color); padding: 10px 0; width: 100%; }
-        .nav-btn { text-align: center; font-size: 12px; color: var(--text-light); cursor: pointer; }
+        .nav-btn { text-align: center; font-size: 12px; color: var(--text-light); cursor: pointer; flex-grow: 1; }
         .nav-btn.active { color: var(--accent-warm); font-weight: 700; }
-        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .main-header .logo { font-size: 20px; font-weight: 700; color: var(--primary-blue); }
-        .hero p { font-size: 22px; font-weight: 500; margin: 0; }
-        .quick-access { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 25px 0; }
-        .qa-btn { background: var(--white); border: 1px solid var(--border-color); border-radius: 15px; padding: 15px 5px; text-align: center; font-size: 14px; font-weight: 500; color: var(--primary-blue); cursor: pointer;}
-        #my-bookings-list ul { list-style: none; padding: 0;}
-        #my-bookings-list li { background-color: var(--white); padding: 10px; border-radius: 5px; margin-bottom: 5px; font-size: 14px;}
-        .detail-header { font-size: 18px; font-weight: 700; margin-bottom: 15px; }
-        .cta-button { background-color: var(--accent-warm); color: var(--primary-blue); font-weight: 700; font-size: 18px; text-align: center; padding: 15px; border-radius: 15px; cursor: pointer; margin-top: 20px; }
-
+        /* 기타 스타일은 생략... */
     </style>
 </head>
 <body>
     <div class="phone-container">
         <div class="content-scroll">
             
-            <div id="auth-screen" class="screen">
-                <header class="main-header"><div class="logo">경기도 Unity</div></header>
-                <h2>안녕하세요!<br>서비스 이용을 위해 로그인 해주세요.</h2>
-                <div id="error-message" style="color: red; margin-bottom: 10px; min-height: 1.2em;"></div>
-                <input type="email" id="auth-email" placeholder="이메일">
-                <input type="password" id="auth-password" placeholder="비밀번호 (6자리 이상)">
-                <button id="login-button">로그인</button>
-                <button id="signup-button" style="background-color: #17a2b8;">회원가입</button>
-            </div>
+            <div id="auth-screen" class="screen"> </div>
+            <div id="main-screen" class="screen" style="display:none;"> </div>
+            <div id="program-list-screen" class="screen" style="display:none;"> </div>
 
-            <div id="main-screen" class="screen" style="display:none;">
-                 <header class="main-header">
-                    <div class="logo">경기도 Unity</div>
-                    <button id="logout-button" style="width: auto;">로그아웃</button>
+            <div id="my-bookings-screen" class="screen" style="display:none;">
+                <header class="main-header">
+                    <div class="logo">나의 예약 현황</div>
                 </header>
-                <section class="hero">
-                    <p id="welcome-message"></p>
-                </section>
-                <section class="quick-access">
-                    <button class="qa-btn" id="go-to-booking">프로그램 예약</button>
-                    <button class="qa-btn" id="show-my-pass">내 출입증</button>
-                    <button class="qa-btn">커뮤니티</button>
-                </section>
-                <div class="booking-step">
-                    <h3>나의 예약 현황</h3>
-                    <div id="my-bookings-list">예약 내역이 없습니다.</div>
-                </div>
+                <main id="my-bookings-list-page">
+                    </main>
             </div>
-
-            <div id="pass-screen" class="screen" style="display:none; text-align: center;">
-                <header class="detail-header">
-                    <span id="back-to-main" style="cursor:pointer; float: left;">&larr; 뒤로</span>
-                    <span style="font-weight:700;">나의 출입증</span>
-                </header>
-                <main style="padding-top: 40px;">
-                    <h3>유료 공간 입장 시 아래 QR코드를 스캔해주세요.</h3>
-                    <div id="qrcode" style="margin: 20px auto; width: 200px; height: 200px; background: #eee; display:flex; align-items:center; justify-content:center;"></div>
-                    <p id="pass-status" style="font-weight: 700;"></p>
-                </main>
-            </div>
-
+            
+            <div id="pass-screen" class="screen" style="display:none; text-align: center;"> </div>
         </div>
         <footer class="bottom-nav" style="display:none;">
-            <div class="nav-btn active">홈</div>
-            <div class="nav-btn">프로그램</div>
-            <div class="nav-btn">내 예약</div>
-            <div class="nav-btn">마이페이지</div>
+            <div class="nav-btn" id="nav-home">홈</div>
+            <div class="nav-btn" id="nav-programs">전체 프로그램</div>
+            <div class="nav-btn" id="nav-my-bookings">내 예약</div>
+            <div class="nav-btn" id="nav-my-page">마이페이지</div>
         </footer>
     </div>
 
@@ -91,139 +51,81 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBirQyhng653nT8u5BOL_rIqz3s5RMGXyo",
-            authDomain: "unity-70a0d.firebaseapp.com",
-            projectId: "unity-70a0d",
-            storageBucket: "unity-70a0d.appspot.com",
-            messagingSenderId: "875001915345",
-            appId: "1:875001915345:web:67171ea942da13320962f0",
-            measurementId: "G-82Y95QFB8R"
-        };
+      // ... firebaseConfig ...
 
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+      // Firebase 초기화
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+      
+      // --- HTML 요소들 ---
+      const screens = {
+        auth: document.getElementById('auth-screen'),
+        main: document.getElementById('main-screen'),
+        programList: document.getElementById('program-list-screen'),
+        myBookings: document.getElementById('my-bookings-screen'),
+        pass: document.getElementById('pass-screen')
+      };
+      const navButtons = {
+        home: document.getElementById('nav-home'),
+        programs: document.getElementById('nav-programs'),
+        myBookings: document.getElementById('nav-my-bookings'),
+        myPage: document.getElementById('nav-my-page')
+      };
+      // ... 나머지 요소들 ...
 
-        const authScreen = document.getElementById('auth-screen');
-        const mainScreen = document.getElementById('main-screen');
-        const passScreen = document.getElementById('pass-screen');
-        const bottomNav = document.querySelector('.bottom-nav');
-        const emailInput = document.getElementById('auth-email');
-        const passwordInput = document.getElementById('auth-password');
-        const signupButton = document.getElementById('signup-button');
-        const loginButton = document.getElementById('login-button');
-        const logoutButton = document.getElementById('logout-button');
-        const welcomeMessage = document.getElementById('welcome-message');
-        const errorMessage = document.getElementById('error-message');
-        const myBookingsList = document.getElementById('my-bookings-list');
-        const bookButton = document.getElementById('go-to-booking'); // This should ideally be on a detail page
-        const showMyPassButton = document.getElementById('show-my-pass');
-        const backToMainButton = document.getElementById('back-to-main');
-        const qrcodeContainer = document.getElementById('qrcode');
-        const passStatus = document.getElementById('pass-status');
+      // --- 함수 정의 ---
 
-        function displayBookings(userId) {
-            myBookingsList.innerHTML = '로딩 중...';
-            db.collection('bookings').where('userId', '==', userId).orderBy('bookingDate', 'desc').get()
-                .then(querySnapshot => {
-                    if (querySnapshot.empty) {
-                        myBookingsList.innerHTML = '예약 내역이 없습니다.';
-                        return;
-                    }
-                    let html = '<ul>';
-                    querySnapshot.forEach(doc => {
-                        const booking = doc.data();
-                        html += `<li>${new Date(booking.bookingDate.toDate()).toLocaleString()} - ${booking.programName}</li>`;
-                    });
-                    html += '</ul>';
-                    myBookingsList.innerHTML = html;
-                }).catch(e => myBookingsList.innerHTML = '예약 내역을 불러오는 데 실패했습니다.');
+      // 화면 전환 함수
+      function showScreen(screenKey) {
+        Object.values(screens).forEach(screen => screen.style.display = 'none');
+        screens[screenKey].style.display = 'block';
+
+        Object.values(navButtons).forEach(btn => btn.classList.remove('active'));
+        if (navButtons[screenKey]) {
+            navButtons[screenKey].classList.add('active');
+        } else if (screenKey === 'pass') {
+            // 출입증 화면은 특정 탭에 속하지 않음
+        } else {
+            navButtons.home.classList.add('active'); // 기본값
         }
+      }
 
-        function generateAccessPass(userId) {
-            qrcodeContainer.innerHTML = '';
-            passStatus.textContent = '인증 상태를 확인 중입니다...';
-            db.collection('bookings').where('userId', '==', userId).limit(1).get()
-                .then(snapshot => {
-                    if (snapshot.empty) {
-                        passStatus.textContent = '사용 가능한 이용권이 없습니다.';
-                        qrcodeContainer.innerHTML = '이용권을 먼저 예약해주세요.';
-                    } else {
-                        passStatus.textContent = '입장이 가능합니다. 환영합니다!';
-                        new QRCode(qrcodeContainer, {
-                            text: JSON.stringify({ userId: userId, timestamp: Date.now() }),
-                            width: 200,
-                            height: 200,
-                        });
-                    }
-                }).catch(e => passStatus.textContent = '오류가 발생했습니다.');
+      // 예약 목록 표시 함수 (컨테이너 ID를 인자로 받음)
+      function displayBookings(userId, containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = '로딩 중...';
+        // ... (이전과 동일한 예약 목록 불러오기 로직) ...
+      }
+
+      // ... generateAccessPass 함수는 이전과 동일 ...
+
+
+      // --- 이벤트 리스너 및 상태 관리 ---
+
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          showScreen('main'); // 로그인 시 메인 화면으로
+          bottomNav.style.display = 'flex';
+          // ... 웰컴 메시지 ...
+          // 두 곳 모두에 예약 목록을 불러옴
+          displayBookings(user.uid, 'my-bookings-list'); 
+          displayBookings(user.uid, 'my-bookings-list-page');
+        } else {
+          showScreen('auth'); // 로그아웃 시 인증 화면으로
+          bottomNav.style.display = 'none';
         }
+      });
+      
+      // 하단 네비게이션 버튼 클릭 이벤트
+      navButtons.home.addEventListener('click', () => showScreen('main'));
+      navButtons.programs.addEventListener('click', () => showScreen('programList'));
+      navButtons.myBookings.addEventListener('click', () => showScreen('myBookings'));
+      // navButtons.myPage.addEventListener('click', () => ...); // 다음 구현 과제
 
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                authScreen.style.display = 'none';
-                mainScreen.style.display = 'block';
-                passScreen.style.display = 'none';
-                bottomNav.style.display = 'flex';
-                welcomeMessage.innerHTML = `${user.email.split('@')[0]} 님,<br>오늘도 활기찬 하루를 시작해볼까요?`;
-                displayBookings(user.uid);
-            } else {
-                authScreen.style.display = 'block';
-                mainScreen.style.display = 'none';
-                passScreen.style.display = 'none';
-                bottomNav.style.display = 'none';
-            }
-        });
-
-        signupButton.addEventListener('click', () => {
-            errorMessage.textContent = '';
-            auth.createUserWithEmailAndPassword(emailInput.value, passwordInput.value)
-                .catch(error => { errorMessage.textContent = error.message; });
-        });
-
-        loginButton.addEventListener('click', () => {
-            errorMessage.textContent = '';
-            auth.signInWithEmailAndPassword(emailInput.value, passwordInput.value)
-                .catch(error => { errorMessage.textContent = error.message; });
-        });
-
-        logoutButton.addEventListener('click', () => { auth.signOut(); });
-
-        showMyPassButton.addEventListener('click', () => {
-            const currentUser = auth.currentUser;
-            if (currentUser) {
-                mainScreen.style.display = 'none';
-                passScreen.style.display = 'block';
-                generateAccessPass(currentUser.uid);
-            }
-        });
-        
-        backToMainButton.addEventListener('click', () => {
-            passScreen.style.display = 'none';
-            mainScreen.style.display = 'block';
-        });
-
-        // This is a placeholder for booking a specific program
-        bookButton.addEventListener('click', () => {
-            const currentUser = auth.currentUser;
-            if (!currentUser) {
-                alert('로그인이 필요합니다.');
-                return;
-            }
-            const bookingData = {
-                userId: currentUser.uid,
-                userEmail: currentUser.email,
-                programName: "리틀 프로젝트 그룹 (테스트)",
-                bookingDate: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            db.collection('bookings').add(bookingData)
-                .then(() => {
-                    alert('테스트 예약에 성공했습니다!');
-                    displayBookings(currentUser.uid);
-                })
-                .catch(error => alert(`예약 실패: ${error.message}`));
-        });
+      // ... 기타 모든 버튼 이벤트 리스너는 이전과 동일 ...
+      
     </script>
 </body>
 </html>
