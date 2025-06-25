@@ -95,6 +95,109 @@
     </style>
 </head>
 <body>
+    <div class="screen">
+        <h2>앱 기능 테스트</h2>
+        <div id="auth-status">로그아웃 상태입니다.</div>
+        
+        <h3>회원가입</h3>
+        <input type="email" id="signup-email" placeholder="이메일">
+        <input type="password" id="signup-password" placeholder="비밀번호 (6자리 이상)">
+        <button id="signup-button">가입하기</button>
+
+        <h3>로그인</h3>
+        <input type="email" id="login-email" placeholder="이메일">
+        <input type="password" id="login-password" placeholder="비밀번호">
+        <button id="login-button">로그인</button>
+        <button id="logout-button" style="display:none;">로그아웃</button>
+    </div>
+    ```
+
+**2단계: Firebase 연결 및 설정**
+
+* 이제 우리 앱과 Firebase 프로젝트를 연결할 차례입니다. `index.html` 파일의 맨 아래, `</body>` 태그 바로 위에, 아래의 `<script>` 코드 블록 전체를 추가합니다.
+
+```html
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+    <script>
+      // 이 아래에 대표님께서 복사해두신 firebaseConfig 정보를 붙여넣어 주세요.
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY", // 예시: "AIzaSy..."
+        authDomain: "YOUR_AUTH_DOMAIN", // 예시: "gyeonggi-do-unity.firebaseapp.com"
+        projectId: "YOUR_PROJECT_ID", // 예시: "gyeonggi-do-unity"
+        storageBucket: "...",
+        messagingSenderId: "...",
+        appId: "..."
+      };
+
+      // Firebase 앱 초기화
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+    </script>
+    ```
+* **[중요]** 위 코드의 `const firebaseConfig = { ... };` 부분에, 대표님께서 이전에 '고정된 노트'에 복사해두셨던 **실제 `firebaseConfig` 정보**를 그대로 붙여넣어 주십시오.
+
+**3단계: 기능 구현을 위한 JavaScript 코드 추가**
+
+* 마지막으로, 실제 기능이 작동하도록 하는 JavaScript 코드를 방금 추가한 `<script>` 블록 안, `const auth = firebase.auth();` 바로 아래에 이어서 추가합니다.
+
+```javascript
+      // ====== 기능 구현 코드 시작 ======
+
+      // HTML 요소들을 가져옵니다.
+      const authStatus = document.getElementById('auth-status');
+      const signupEmail = document.getElementById('signup-email');
+      const signupPassword = document.getElementById('signup-password');
+      const signupButton = document.getElementById('signup-button');
+      const loginEmail = document.getElementById('login-email');
+      const loginPassword = document.getElementById('login-password');
+      const loginButton = document.getElementById('login-button');
+      const logoutButton = document.getElementById('logout-button');
+
+      // 로그인 상태가 변경될 때마다 UI를 업데이트합니다.
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          // 사용자가 로그인한 경우
+          authStatus.textContent = `${user.email} 님, 환영합니다.`;
+          logoutButton.style.display = 'inline-block';
+        } else {
+          // 사용자가 로그아웃한 경우
+          authStatus.textContent = '로그아웃 상태입니다.';
+          logoutButton.style.display = 'none';
+        }
+      });
+
+      // 회원가입 버튼 클릭 이벤트
+      signupButton.addEventListener('click', () => {
+        const email = signupEmail.value;
+        const password = signupPassword.value;
+        auth.createUserWithEmailAndPassword(email, password)
+          .then(userCredential => {
+            alert('회원가입에 성공했습니다!');
+          })
+          .catch(error => {
+            alert(`회원가입 실패: ${error.message}`);
+          });
+      });
+
+      // 로그인 버튼 클릭 이벤트
+      loginButton.addEventListener('click', () => {
+        const email = loginEmail.value;
+        const password = loginPassword.value;
+        auth.signInWithEmailAndPassword(email, password)
+          .catch(error => {
+            alert(`로그인 실패: ${error.message}`);
+          });
+      });
+
+      // 로그아웃 버튼 클릭 이벤트
+      logoutButton.addEventListener('click', () => {
+        auth.signOut().then(() => {
+            alert('로그아웃 되었습니다.');
+        });
+      });
+      // ====== 기능 구현 코드 끝 ======
     <div class="phone-container">
         <div class="content-scroll">
             <div class="screen">
