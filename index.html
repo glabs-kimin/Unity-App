@@ -3,99 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>경기도 Unity MVP (v1.2)</title>
+    <title>경기도 Unity MVP (v1.3)</title>
     <style>
+        /* CSS 스타일은 이전과 동일하므로 생략합니다. 실제 코드에는 이 자리에 CSS 코드가 들어갑니다. */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
-        
-        :root {
-            --primary-blue: #0A2C4A;
-            --accent-warm: #FFB836;
-            --text-dark: #333333;
-            --text-light: #777777;
-            --bg-light: #f8f9fa;
-            --white: #ffffff;
-            --border-color: #e9ecef;
-        }
-
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            margin: 0;
-            background-color: #ccc;
-            display: flex;
-            justify-content: center;
-            padding: 20px 0;
-        }
-
-        .phone-container {
-            width: 375px;
-            height: 812px;
-            background-color: var(--bg-light);
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            border-radius: 40px;
-            overflow: hidden;
-            border: 10px solid #111;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .content-scroll {
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-
-        .screen {
-            padding: 20px;
-            border-bottom: 2px solid var(--border-color);
-            margin-bottom: 20px;
-        }
-        
-        h1, h2, h3 { color: var(--primary-blue); margin-top: 0; }
+        :root { --primary-blue: #0A2C4A; --accent-warm: #FFB836; --text-dark: #333333; --text-light: #777777; --bg-light: #f8f9fa; --white: #ffffff; --border-color: #e9ecef; }
+        body { font-family: 'Noto Sans KR', sans-serif; margin: 0; background-color: #ccc; display: flex; justify-content: center; padding: 20px 0; }
+        .phone-container { width: 375px; height: 812px; background-color: var(--white); box-shadow: 0 0 20px rgba(0,0,0,0.1); border-radius: 40px; overflow: hidden; border: 10px solid #111; display: flex; flex-direction: column; }
+        .content-scroll { flex-grow: 1; overflow-y: auto; background-color: var(--bg-light); }
+        .screen { padding: 20px; }
+        h2, h3 { color: var(--primary-blue); margin-top: 0; }
         p { color: var(--text-dark); line-height: 1.6; }
-        input { padding: 8px; margin-right: 5px; border: 1px solid var(--border-color); border-radius: 5px;}
-        button { padding: 8px 12px; border: none; background-color: var(--primary-blue); color: var(--white); border-radius: 5px; cursor: pointer;}
+        input { width: calc(100% - 20px); padding: 10px; margin-bottom: 10px; border: 1px solid var(--border-color); border-radius: 5px;}
+        button { width: 100%; padding: 12px; border: none; background-color: var(--primary-blue); color: var(--white); border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 5px;}
         button:hover { background-color: #0056b3; }
-        #logout-button { background-color: #dc3545; }
-
-
-        .bottom-nav {
-            display: flex;
-            justify-content: space-around;
-            background-color: var(--white);
-            border-top: 1px solid var(--border-color);
-            padding: 10px 0;
-            width: 100%;
-        }
+        #logout-button { background-color: #6c757d; }
+        .bottom-nav { display: flex; justify-content: space-around; background-color: var(--white); border-top: 1px solid var(--border-color); padding: 10px 0; width: 100%; }
         .nav-btn { text-align: center; font-size: 12px; color: var(--text-light); cursor: pointer; }
         .nav-btn.active { color: var(--accent-warm); font-weight: 700; }
+        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .main-header .logo { font-size: 20px; font-weight: 700; color: var(--primary-blue); }
+        .hero p { font-size: 22px; font-weight: 500; margin: 0; }
     </style>
 </head>
 <body>
     <div class="phone-container">
         <div class="content-scroll">
             
-            <div class="screen">
-                <h2>앱 기능 테스트</h2>
-                <div id="auth-status">로그아웃 상태입니다.</div>
-                <hr>
-                <h3>회원가입</h3>
-                <input type="email" id="signup-email" placeholder="이메일">
-                <input type="password" id="signup-password" placeholder="비밀번호 (6자리 이상)">
-                <button id="signup-button">가입하기</button>
-
-                <h3>로그인</h3>
-                <input type="email" id="login-email" placeholder="이메일">
-                <input type="password" id="login-password" placeholder="비밀번호">
+            <div id="auth-screen" class="screen">
+                <header class="main-header">
+                    <div class="logo">경기도 Unity</div>
+                </header>
+                <h2>안녕하세요!<br>서비스 이용을 위해 로그인 해주세요.</h2>
+                <div id="error-message" style="color: red; margin-bottom: 10px;"></div>
+                <h3>이메일로 시작하기</h3>
+                <input type="email" id="auth-email" placeholder="이메일">
+                <input type="password" id="auth-password" placeholder="비밀번호 (6자리 이상)">
                 <button id="login-button">로그인</button>
-                <button id="logout-button" style="display:none;">로그아웃</button>
+                <button id="signup-button" style="background-color: #17a2b8;">회원가입</button>
             </div>
-            </div>
+
+            <div id="main-screen" class="screen" style="display:none;">
+                 <header class="main-header">
+                    <div class="logo">경기도 Unity</div>
+                    <button id="logout-button" style="width: auto;">로그아웃</button>
+                </header>
+                <section class="hero">
+                    <p id="welcome-message">백기민님,<br>오늘도 활기찬 하루를 시작해볼까요?</p>
+                </section>
+                </div>
+
+        </div>
+        <footer class="bottom-nav" style="display:none;">
+            <div class="nav-btn active">홈</div>
+            <div class="nav-btn">프로그램</div>
+            <div class="nav-btn">내 예약</div>
+            <div class="nav-btn">마이페이지</div>
+        </footer>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
     <script>
-      // 대표님의 실제 firebaseConfig 정보
       const firebaseConfig = {
         apiKey: "AIzaSyBirQyhng653nT8u5BOL_rIqz3s5RMGXyo",
         authDomain: "unity-70a0d.firebaseapp.com",
@@ -106,67 +76,61 @@
         measurementId: "G-82Y95QFB8R"
       };
 
-      // Firebase 앱 초기화
       firebase.initializeApp(firebaseConfig);
       const auth = firebase.auth();
       
-      // ====== 기능 구현 코드 시작 ======
-      const authStatus = document.getElementById('auth-status');
-      const signupEmail = document.getElementById('signup-email');
-      const signupPassword = document.getElementById('signup-password');
+      const authScreen = document.getElementById('auth-screen');
+      const mainScreen = document.getElementById('main-screen');
+      const bottomNav = document.querySelector('.bottom-nav');
+      
+      const emailInput = document.getElementById('auth-email');
+      const passwordInput = document.getElementById('auth-password');
       const signupButton = document.getElementById('signup-button');
-      const loginEmail = document.getElementById('login-email');
-      const loginPassword = document.getElementById('login-password');
       const loginButton = document.getElementById('login-button');
       const logoutButton = document.getElementById('logout-button');
+      
+      const welcomeMessage = document.getElementById('welcome-message');
+      const errorMessage = document.getElementById('error-message');
 
+      // 로그인 상태 감지 및 화면 전환
       auth.onAuthStateChanged(user => {
         if (user) {
-          authStatus.textContent = `${user.email} 님, 환영합니다.`;
-          logoutButton.style.display = 'inline-block';
+          authScreen.style.display = 'none';
+          mainScreen.style.display = 'block';
+          bottomNav.style.display = 'flex';
+          welcomeMessage.innerHTML = `${user.email} 님,<br>오늘도 활기찬 하루를 시작해볼까요?`;
         } else {
-          authStatus.textContent = '로그아웃 상태입니다.';
-          logoutButton.style.display = 'none';
+          authScreen.style.display = 'block';
+          mainScreen.style.display = 'none';
+          bottomNav.style.display = 'none';
         }
       });
 
+      // 회원가입
       signupButton.addEventListener('click', () => {
-        const email = signupEmail.value;
-        const password = signupPassword.value;
-        auth.createUserWithEmailAndPassword(email, password)
+        errorMessage.textContent = '';
+        auth.createUserWithEmailAndPassword(emailInput.value, passwordInput.value)
           .then(userCredential => {
-            alert('회원가입에 성공했습니다!');
-            signupEmail.value = '';
-            signupPassword.value = '';
+            alert('회원가입에 성공했습니다! 자동으로 로그인됩니다.');
           })
           .catch(error => {
-            alert(`회원가입 실패: ${error.message}`);
+            errorMessage.textContent = error.message;
           });
       });
 
-      // 로그인 버튼 클릭 이벤트
+      // 로그인
       loginButton.addEventListener('click', () => {
-        const email = loginEmail.value;
-        const password = loginPassword.value;
-        auth.signInWithEmailAndPassword(email, password)
-          .then(userCredential => {
-            // 로그인 성공 시
-            alert('로그인에 성공했습니다! 환영합니다.'); // <-- 이 부분이 추가되었습니다.
-            loginEmail.value = '';
-            loginPassword.value = '';
-          })
+        errorMessage.textContent = '';
+        auth.signInWithEmailAndPassword(emailInput.value, passwordInput.value)
           .catch(error => {
-            // 로그인 실패 시
-            alert(`로그인 실패: ${error.message}`);
+            errorMessage.textContent = error.message;
           });
       });
 
+      // 로그아웃
       logoutButton.addEventListener('click', () => {
-        auth.signOut().then(() => {
-            alert('로그아웃 되었습니다.');
-        });
+        auth.signOut();
       });
-      // ====== 기능 구현 코드 끝 ======
     </script>
 </body>
 </html>
